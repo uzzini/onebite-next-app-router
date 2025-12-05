@@ -5,7 +5,8 @@ import { BookData } from "@/types";
 
 async function Footer() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
+    { cache: "force-cache" } // 풀 라우트 캐시를 위한 데이터 캐시 설정
   );
   if (!response.ok) {
     return <footer>제작 @uzzin</footer>;
