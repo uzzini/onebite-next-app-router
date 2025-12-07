@@ -1,11 +1,14 @@
 import BookItem from "@/components/book-item";
 import { BookData } from "@/types";
+import { delay } from "@/util/delay";
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
 }) {
+  await delay(1500);
+
   const { q } = await searchParams;
 
   const response = await fetch(
