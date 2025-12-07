@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import BookItem from "@/components/book-item";
 import style from "./page.module.css";
 import { BookData } from "@/types";
+import { delay } from "@/util/delay";
 
 // 라우트 세그먼트 옵션
 // dynamic : 특정 페이지의 유형을 강제로 Static 또는 Dynamic 페이지로 설정
@@ -11,6 +13,7 @@ import { BookData } from "@/types";
 // export const dynamic = "auto";
 
 async function AllBooks() {
+  await delay(1500); // 1.5초 딜레이
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
     { cache: "force-cache" } // 풀 라우트 캐시를 위한 데이터 캐시 설정
@@ -31,6 +34,7 @@ async function AllBooks() {
 }
 
 async function RecoBooks() {
+  await delay(3000); // 3초 딜레이
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`,
     { next: { revalidate: 3 } } // 데이터 캐시 옵션
@@ -50,17 +54,24 @@ async function RecoBooks() {
   );
 }
 
+// Dynamic 페이지로 설정 ( 스트리밍 동작 과정 확인하기 위함 )
+export const dynamic = "force-dynamic";
+
 export default function Home() {
 
   return (
     <div className={style.container}>
       <section>
         <h3>지금 추천하는 도서</h3>
-        <RecoBooks />
+        <Suspense fallback={<div>추천 도서 불러오는 중...</div>}>
+          <RecoBooks />
+        </Suspense>
       </section>
       <section>
         <h3>등록된 모든 도서</h3>
-        <AllBooks />
+        <Suspense fallback={<div>모든 도서 불러오는 중...</div>}>
+          <AllBooks />
+        </Suspense>
       </section>
     </div>
   );
