@@ -1,6 +1,7 @@
 import { Suspense } from "react";
-import BookItem from "@/components/book-item";
 import style from "./page.module.css";
+import BookItem from "@/components/book-item";
+import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { BookData } from "@/types";
 import { delay } from "@/util/delay";
 
@@ -58,18 +59,17 @@ async function RecoBooks() {
 export const dynamic = "force-dynamic";
 
 export default function Home() {
-
   return (
     <div className={style.container}>
       <section>
         <h3>지금 추천하는 도서</h3>
-        <Suspense fallback={<div>추천 도서 불러오는 중...</div>}>
+        <Suspense fallback={<BookListSkeleton count={3} />}>
           <RecoBooks />
         </Suspense>
       </section>
       <section>
         <h3>등록된 모든 도서</h3>
-        <Suspense fallback={<div>모든 도서 불러오는 중...</div>}>
+        <Suspense fallback={<BookListSkeleton count={10} />}>
           <AllBooks />
         </Suspense>
       </section>
