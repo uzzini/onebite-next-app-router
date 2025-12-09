@@ -4,6 +4,7 @@ import BookItem from "@/components/book-item";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { BookData } from "@/types";
 import { delay } from "@/util/delay";
+import { Metadata } from "next";
 
 // 라우트 세그먼트 옵션
 // dynamic : 특정 페이지의 유형을 강제로 Static 또는 Dynamic 페이지로 설정
@@ -57,6 +58,17 @@ async function RecoBooks() {
 
 // Dynamic 페이지로 설정 ( 스트리밍 동작 과정 확인하기 위함 )
 export const dynamic = "force-dynamic";
+
+// 메타 데이터 설정
+export const metadata: Metadata = {
+  title: "한입북스",
+  description: "한입북스에 등록된 도서들을 만나보세요.",
+  openGraph: {
+    title: "한입북스",
+    description: "한입북스에 등록된 도서들을 만나보세요.",
+    images: ["/thumbnail.png"]
+  }
+};
 
 export default function Home() {
   return (

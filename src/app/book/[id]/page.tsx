@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
 import Image from "next/image";
-import { ReviewData } from "@/types";
+import { BookData, ReviewData } from "@/types";
 import ReviewEditor from "@/components/review-editor";
 import ReviewItem from "@/components/review-item";
+import { Metadata } from "next";
 
 // 풀 라우트 캐시 동적 경로 적용
 // 어떠한 URL Parameter가 빌드 타임에 페이지에 존재할 수 있는지 직접 설정
@@ -63,6 +64,35 @@ async function ReviewList({ bookId }: { bookId: string }) {
       ))}
     </section>
   );
+}
+
+// generateMetadata: 현재 페이지의 메타 데이터를 동적으로 생성
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+
+  // Request Memoization 적용됨
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`
+  );
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const book: BookData = await response.json();
+
+  return {
+    title: `${book.title} - 한입북스`,
+    description: `${book.description}`,
+    openGraph: {
+      title: `${book.title} - 한입북스`,
+      description: `${book.description}`,
+      images: [book.coverImgUrl]
+    }
+  };
 }
 
 export default async function Page({
