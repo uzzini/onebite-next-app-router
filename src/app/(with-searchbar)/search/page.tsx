@@ -2,13 +2,10 @@ import { Suspense } from "react";
 import BookItem from "@/components/book-item";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { BookData } from "@/types";
-import { delay } from "@/util/delay";
 import { Metadata } from "next";
 
 // 컴포넌트 스트리밍 적용
 async function SearchResult({ q }: { q: string }) {
-  await delay(1500);
-
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/search?q=${q}`,
     { cache: "force-cache" } // 검색 결과 캐싱

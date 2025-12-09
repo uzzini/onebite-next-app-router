@@ -29,7 +29,7 @@ export async function deleteReviewAction(
       throw new Error(response.statusText);
     }
 
-    revalidateTag(`review-${bookId}`); // 리뷰 재검증
+    revalidateTag(`review-${bookId}`, {}); // 리뷰 재검증
     
     return {
       status: true,

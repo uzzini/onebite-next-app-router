@@ -9,8 +9,18 @@ import { Metadata } from "next";
 // 풀 라우트 캐시 동적 경로 적용
 // 어떠한 URL Parameter가 빌드 타임에 페이지에 존재할 수 있는지 직접 설정
 // generateStaticParams() : 정적인 파라미터를 생성하는 함수
-export function generateStaticParams() {
-  return [{ id: "1" }, { id: "2" }, { id: "3" }];
+export async function generateStaticParams() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`
+  );
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  const books: BookData[] = await response.json();
+
+  return books.map((book) => ({
+    id: book.id.toString()
+  }));
 }
 
 async function BookDetail({ bookId }: { bookId: string }) {

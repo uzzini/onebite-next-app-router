@@ -1,7 +1,6 @@
 "use server"; // 서버 액션 설정
 
 import { revalidateTag } from "next/cache";
-import { delay } from "@/util/delay";
 
 // 리뷰 추가 기능
 export async function createReviewAction(
@@ -21,7 +20,6 @@ export async function createReviewAction(
   }
 
   try {
-    await delay(2000);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review`,
       {
@@ -33,7 +31,7 @@ export async function createReviewAction(
       throw new Error(response.statusText);
     }
 
-    revalidateTag(`review-${bookId}`); // 리뷰 재검증
+    revalidateTag(`review-${bookId}`, {}); // 리뷰 재검증
 
     return {
       status: true,
